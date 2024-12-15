@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "fast-api"
+version = "0.1.0"
+description = ""
+authors = ["Ryan0x <chiayi520@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+uvicorn = "^0.32.1"
+fastapi = "^0.115.6"
+pydantic = "^2.10.3"
+python-dotenv = "^1.0.1"
+psycopg2-binary = "^2.9.10"
+sqlmodel = "^0.0.22"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
