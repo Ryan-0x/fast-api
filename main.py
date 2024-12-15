@@ -1,5 +1,5 @@
 # from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 # from app.core.config import settings
 # from app.api.endpoints import todos
 # from app.db.base import Base
@@ -13,14 +13,7 @@
 #     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 # )
 
-# # Configure CORS
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["http://localhost:8080"],  # Vue.js default port
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+
 
 # # Include routers
 # app.include_router(
@@ -51,6 +44,14 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# # Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Vue.js default port
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(tasks_router)
 app.include_router(users_router)
