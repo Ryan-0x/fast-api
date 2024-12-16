@@ -1,27 +1,4 @@
-# from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# from app.core.config import settings
-# from app.api.endpoints import todos
-# from app.db.base import Base
-# from app.db.session import engine
-
-# # Create database tables
-# Base.metadata.create_all(bind=engine)
-
-# app = FastAPI(
-#     title=settings.PROJECT_NAME,
-#     openapi_url=f"{settings.API_V1_STR}/openapi.json"
-# )
-
-
-
-# # Include routers
-# app.include_router(
-#     todos.router,
-#     prefix=f"{settings.API_V1_STR}/todos",
-#     tags=["todos"]
-# )
-
 from fastapi import FastAPI
 from db import init_db
 from contextlib import asynccontextmanager
