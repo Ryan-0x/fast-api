@@ -2,6 +2,8 @@ from sqlmodel import Session, SQLModel, create_engine ,text
 import os
 from dotenv import load_dotenv
 
+
+
 load_dotenv()
 
 

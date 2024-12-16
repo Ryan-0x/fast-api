@@ -1,33 +1,50 @@
 import fastapi
 from fastapi import Depends,HTTPException
-from models import TaskCreate,Task,TaskUpdate,User
+
+from models.task import TaskCreate, Task, TaskUpdate
+from models.user import User, UserCreate, UserLogin
 from db import get_session
 from sqlmodel import Session,select
 from datetime import datetime
+from auth import get_current_user
+
 router = fastapi.APIRouter()
 
 @router.get("/tasks")
 async def get_tasks(session:Session = Depends(get_session)):
-    tasks = session.exec(select(Task)).all()
+    statement = select(Task, User).join(User, Task.created_by == User.id)
+    results = session.exec(statement).all()
+    
+    # Convert results to a list of dictionaries with task and creator info
+    tasks = []
+    for task, user in results:
+        task_dict = task.model_dump()
+        task_dict["creator"] = {
+            "id": user.id,
+            "username": user.username,
+            # Add other user fields you want to include
+        }
+        tasks.append(task_dict)
     return tasks
 
 @router.post("/tasks")
-async def create_task(task_data: TaskCreate, session: Session = Depends(get_session)):
+async def create_task(
+    task_data: TaskCreate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
     new_task = Task(
         title=task_data.title,
         description=task_data.description,
         completed=task_data.completed,
-        created_by=task_data.created_by
+        created_by=current_user.id  # Automatically set created_by to current user's ID
     )
-    
-    user = session.exec(select(User).where(User.id == task_data.created_by)).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
     
     session.add(new_task)
     session.commit()
     session.refresh(new_task)
     return new_task
+
 
 @router.get("/tasks/{id}")
 async def get_task(id:int,session:Session = Depends(get_session)):
