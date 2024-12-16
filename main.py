@@ -53,5 +53,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(tasks_router)
-app.include_router(users_router)
+# Include routers with prefix
+app.include_router(
+    tasks_router,
+    prefix="/api/v1",
+    tags=["tasks"]
+)
+
+app.include_router(
+    users_router,
+    prefix="/api/v1",
+    tags=["users"]
+)
